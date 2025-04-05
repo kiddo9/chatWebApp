@@ -1,0 +1,41 @@
+"version": "3.0"
+"services":
+  mysql:
+    image: mysql
+    container_name: myDb
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD: root
+      - MYSQL_DATABASE: chatWebApp
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data: /var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: Adminui
+    restart: always
+    environment:
+      - PMA_HOST: myDb
+      - PMA_PORT: 3306
+    ports:
+      - 8000:80
+    depends_on:
+      - mysql
+
+  redis:
+    image: redis
+    container_name: redis_cache
+    restart: always
+    ports:
+      - 8000:6537
+    volumes:
+      - redis-data: /data
+
+volumes:
+  mysql-data:
+    driver: local
+
+  redis-data:
+    driver: local
