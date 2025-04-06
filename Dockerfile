@@ -16,7 +16,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN composer install 
 
 #set storage permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
