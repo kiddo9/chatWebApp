@@ -15,8 +15,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy project files
 COPY . .
 
-# Install PHP dependencies
-RUN composer install 
+# Install PHP dependencies without triggering artisan
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
 
 #set storage permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
