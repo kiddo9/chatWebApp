@@ -1,12 +1,17 @@
 # Use official PHP image with required extensions
 FROM php:8.2-fpm
 
-# Install system dependencies
+# Install system dependencies (Step 1)
 RUN apt-get update && apt-get install -y \
-    git curl libpng-dev libonig-dev libxml2-dev zip unzip \
-    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd sockets
+    git curl zip unzip libpng-dev libonig-dev libxml2-dev
+
+# Install Node.js (Step 2)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
+# Install PHP extensions (Step 3)
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd sockets
+
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -18,7 +23,6 @@ COPY packages.json packages.lock ./
 # Install Node.js dependencies
 RUN npm install 
 
-RUN npm run build
 # copy composer files
 COPY composer.json composer.lock ./
 # Install Composer dependencies
@@ -26,6 +30,8 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-s
 
 # Copy project files
 COPY . .
+
+RUN npm run build
 
 #set storage permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
