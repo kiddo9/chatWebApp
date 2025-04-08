@@ -6,16 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     @livewireStyles
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endif
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
 </head>
 <body>
 <main>
     {{ $slot }}
 </main>
-    
-    
     @livewireScripts
+    {{-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> --}}
 </body>
 </html>
