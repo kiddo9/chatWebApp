@@ -28,10 +28,11 @@ COPY package.json package-lock.json ./
 # Install Node.js dependencies
 RUN npm install 
 
+#build dependencies
+RUN npm run build
+
 # Copy project files
 COPY . .
-
-RUN npm run build
 
 #set storage permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
