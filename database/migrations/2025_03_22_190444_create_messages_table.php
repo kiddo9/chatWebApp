@@ -16,7 +16,8 @@ return new class extends Migration
             $table->integer('chatRoomId');
             $table->integer('senderId');
             $table->integer('receiverId');
-            $table->integer('message');
+            $table->longText('message');
+            $table->tinyInteger('seen')->default(0);
             $table->timestamps();
         });
     }

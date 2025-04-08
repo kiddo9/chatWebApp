@@ -1,13 +1,14 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_run:
+    workflows: ["laravel_CI"]
+    types:
+      - completed
 
 jobs:
-  build:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,3 +37,13 @@ jobs:
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: true
           sbom: true
+
+      - name: Run migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: hopper.proxy.rlwy.net
+          DB_PORT: 47394
+          DB_DATABASE: railway
+          DB_USERNAME: root
+          DB_PASSWORD: CPzJQXWTYqsldyGTELvhmEXkXTlOonkF

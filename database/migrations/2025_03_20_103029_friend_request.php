@@ -15,9 +15,9 @@ return new class extends Migration
 
        Schema::create('friendRequest', function(Blueprint $table){
         $table->id();
-        $table->string('requestId');
-        $table->string('senderId');
-        $table->string('receiverId');
+        $table->int('requestId');
+        $table->tinyInteger('senderId');
+        $table->tinyInteger('receiverId');
         $table->string('request_status');
         $table->timestamps();
        });
