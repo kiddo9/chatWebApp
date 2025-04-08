@@ -19,7 +19,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-COPY packages.json packages.lock ./
+# COPY packages.json packages.lock ./
 # Install Node.js dependencies
 RUN npm install 
 
