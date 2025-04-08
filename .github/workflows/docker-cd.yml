@@ -37,13 +37,3 @@ jobs:
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: true
           sbom: true
-
-      - name: Run migrations
-        run: php artisan migrate --force
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: hopper.proxy.rlwy.net
-          DB_PORT: 47394
-          DB_DATABASE: railway
-          DB_USERNAME: root
-          DB_PASSWORD: CPzJQXWTYqsldyGTELvhmEXkXTlOonkF
