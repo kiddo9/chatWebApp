@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ $title ?? 'chatWebApp' }}</title>
         @livewireStyles
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+        @assets('build/manifest.json')
     </head>
     <body>
         <x-chat-Navbar />
