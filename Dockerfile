@@ -4,6 +4,8 @@ FROM php:8.2-fpm
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git curl libpng-dev libonig-dev libxml2-dev zip unzip \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
     && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd sockets
 
 # Install Composer
@@ -12,6 +14,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
+COPY packages.json packages.lock ./
+# Install Node.js dependencies
+RUN npm install 
+
+RUN npm run build
 # copy composer files
 COPY composer.json composer.lock ./
 # Install Composer dependencies
