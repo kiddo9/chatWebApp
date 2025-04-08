@@ -24,7 +24,7 @@ COPY composer.json composer.lock ./
 # Install Composer dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
-COPY package.json package.lock ./
+COPY package.json package-lock.json ./
 # Install Node.js dependencies
 RUN npm install 
 
