@@ -19,14 +19,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# COPY packages.json packages.lock ./
-# Install Node.js dependencies
-RUN npm install 
-
 # copy composer files
 COPY composer.json composer.lock ./
 # Install Composer dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
+COPY package.json package.lock ./
+# Install Node.js dependencies
+RUN npm install 
 
 # Copy project files
 COPY . .
