@@ -1,5 +1,8 @@
 # Use official PHP image with required extensions
-FROM php:8.2-fpm
+FROM php:8.2-apache
+
+# Enable Apache mod_rewrite for Laravel routes
+RUN a2enmod rewrite
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -10,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/html
 
 # copy composer files
 COPY composer.json composer.lock ./
@@ -25,9 +28,12 @@ RUN chown -R www-data:www-data /var/www \
   && chmod -R 755 /var/www/storage \
   && chmod -R 755 /var/www/bootstrap/cache
 
-  
-# Expose port
-EXPOSE 8000
+  # Update Apache to serve from Laravel's public folder
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+
+# Expose port
+EXPOSE 80
+
+#CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 
