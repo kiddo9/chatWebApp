@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     @livewireStyles
-    @vite('resources/css/app.css')
+    @assets('build/manifest.json')
 </head>
 <body>
 <main>
