@@ -31,9 +31,6 @@ RUN npm install
 # Copy project files
 COPY . .
 
-#build dependencies
-RUN npm run build
-
 #set storage permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
  && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
