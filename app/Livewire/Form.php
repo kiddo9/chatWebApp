@@ -136,6 +136,8 @@ class Form extends Component
         }
 
         public function save(){
+            $this->validate($this->rule[$this->multiform]);
+            
             if($this->image != ''){
                $Image = $this->image->store('images', 'public');
 
