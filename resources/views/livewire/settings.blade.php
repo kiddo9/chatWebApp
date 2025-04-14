@@ -68,7 +68,7 @@
         <div class="bg-white px-4 py-4 absolute left-[50%] top-[50%] w-80 sm:w-96 h-44 rounded-xl translate-x-[-50%] translate-y-[-50%]">
             <p id="warning" class="text-center"></p>
             <div class="flex justify-between absolute bottom-5 left-0 right-0 px-9">
-                <button class="cursor-pointer">NO</button>
+                <button wire:click='$js.closed' class="cursor-pointer">NO</button>
                 <button id="Logout" wire:click='$js.Logout' class="cursor-pointer hidden">YES</button>
                 <button id="Delete" wire:click='$js.Delete' class="cursor-pointer hidden">YES</button>
             </div>
@@ -120,6 +120,7 @@
         if(logout == "logout"){
             document.getElementById("warning").innerHTML = "Are ou sure you want logout?";
             document.getElementById("Logout").classList.remove("hidden");
+            document.getElementById("Delete").classList.add("hidden");
         }
     })
 
@@ -137,6 +138,7 @@
         if(Delete == "delete"){
             document.getElementById("warning").innerHTML = "Are you sure you want delete your account?";
             document.getElementById("Delete").classList.remove("hidden");
+            document.getElementById("Logout").classList.add("hidden");
         }
     })
 
@@ -153,6 +155,12 @@
         
         $wire.call('logout');
 
+        let show = document.getElementById('show');
+        show.classList.add("opacity-0", "-z-40");
+        show.classList.remove("opacity-100", "z-[10000000000000]");
+    })
+
+    $js('closed', () => {
         let show = document.getElementById('show');
         show.classList.add("opacity-0", "-z-40");
         show.classList.remove("opacity-100", "z-[10000000000000]");

@@ -6,8 +6,10 @@ use App\Events\MessageSent;
 use App\Events\notification;
 use App\Models\messages;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Throwable;
 
 class ChatSpace extends Component
 {
@@ -41,32 +43,40 @@ class ChatSpace extends Component
     }
 
     public function sendText(){
-        if($this->text == '' || $this->text == null){
-            return;
-        }
+        try {
+            if($this->text == '' || $this->text == null){
+                return;
+            }
 
-        $sender = auth()->user()->id;
-        $receiver = $this->friendId;
+            $sender = auth()->user()->id;
+            $receiver = $this->friendId;
 
-         $chat = messages::create([
-            'chatRoomId' => $this->roomId,
-            'senderId' => $sender,
-            'receiverId' => $receiver,
-            'message' => $this->text,
-            'seen' => 0
-        ]);
+            $chat = messages::create([
+                'chatRoomId' => $this->roomId,
+                'senderId' => $sender,
+                'receiverId' => $receiver,
+                'message' => $this->text,
+                'seen' => 0
+            ]);
 
-        $notification = [
-            'receiverId' => $receiver,
-            'message' => "{$this->friend} texted you. \n text: {$this->text}",
-        ];
+            $notification = [
+                'receiverId' => $receiver,
+                'message' => "{$this->friend} texted you. \n text: {$this->text}",
+            ];
 
-        broadcast(new MessageSent($chat))->toOthers();
+           
+            broadcast(new MessageSent($chat))->toOthers();
+            broadcast(new notification('chat', $notification ))->toOthers();
 
-        $this->text = '';
-        $this->getmesseages();
-
-        broadcast(new notification('chat', $notification ))->toOthers();
+            $this->text = '';
+            $this->getmesseages();
+            
+        } catch (Throwable $th) {
+            \Log::error("boradcast error", [$th->getMessage()]);
+            $this->text = '';
+            $this->getmesseages();
+            
+        };
     }
 
     #[On('messageReceived')]

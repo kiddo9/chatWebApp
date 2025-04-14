@@ -195,8 +195,7 @@
         PostStory.onchange = () => {
             if (PostStory.files.length > 0) {
                 setTimeout(() => {
-                document.getElementById("editor").classList.remove("hidden");
-                    console.log(PostStory.files[0]); 
+                document.getElementById("editor").classList.remove("hidden"); 
                 }, 500);
                 
             }

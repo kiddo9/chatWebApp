@@ -76,13 +76,23 @@ class Profile extends Component
         ]);
 
         sleep(3);
-        session()->flash('success', 'sent');
+        
         $notification = [
             'receiverId' => $this->receiverId,
             'message' => "you have new friend request",
         ];
 
-        broadcast(new notification('request', $notification))->toOthers();
+        session()->flash('success', 'sent');
+
+        try {
+            //code...
+            broadcast(new notification('request', $notification ))->toOthers();
+            
+        } catch (\Throwable $th) {
+            //throw $th;
+            \Log::error("message", [$th->getMessage()]);
+        }
+       
     }
 
     public function placeholder(){
