@@ -44,8 +44,6 @@ class Messages extends Component
         if(is_array($friendList)){
              $this->friends = User::whereIn('id', $friendList)->get();
         }
-       
-        sleep(3);
     }
 
     public function openChatSpace($friendId){

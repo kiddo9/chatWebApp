@@ -1,6 +1,6 @@
 <div>
     <div class="flex justify-center float-right md:float-none md:mx-auto items-center bg-gray-300 mt-10 w-72 mr-2  md:w-[30rem] rounded-xl" >
-        <input wire:model.live.debounce.250ms="search" type="text" class="md:w-[25rem] w-64 py-3 px-2 outline-0" placeholder="search">
+        <input wire:model.live.debounce.100ms="search" type="text" class="md:w-[25rem] w-64 py-3 px-2 outline-0" placeholder="search">
         <img wire:click='updatedQuery' src="search.svg" alt="" srcset="">
     </div>
     @if (!empty($users))

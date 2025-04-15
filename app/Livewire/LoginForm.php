@@ -24,7 +24,6 @@ class LoginForm extends Component
         if(auth()->check()){
             return redirect('/messages');
         }
-        sleep(3);
     }
     public function placeholder(){
         return <<<'HTML'
@@ -44,9 +43,8 @@ class LoginForm extends Component
         $finduser = Auth::attempt(['username' => $this->username, 'password' => $this->password]);
 
         if($finduser){
-                sleep(2);
-                session()->flash('success', 'user details correct exists');
-                return redirect('/messages'); 
+            session()->flash('success', 'user details correct exists');
+            return redirect('/messages'); 
         }
 
         return session()->flash('error', 'user does not exists or incorrect details');

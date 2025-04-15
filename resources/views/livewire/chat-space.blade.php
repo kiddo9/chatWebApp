@@ -40,12 +40,27 @@
 
     <div id="messages" class="mt-5 px-4 flex flex-col h-[77%] gap-2 overflow-y-scroll">
         @foreach ($chats as $chat)
+    <div 
+        wire:key="chat-{{ $chat->id }}" 
+        class="{{ $chat->senderId == auth()->id() ? 'text-right justify-end' : 'text-left' }} 
+               flex flex-wrap transition-all duration-300 ease-in-out"
+               x-data="{ visible: false }"
+        x-show="visible"
+        x-transition:enter="transition duration-300 ease-in"
+        x-transition:enter-start="opacity-0 translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-init="setTimeout(() => visible = true, 10)"
+    >
+        <p class="px-2 flex flex-col text-left py-3 text-[10px]  
+            {{ $chat->senderId == auth()->id() ? 'bg-[#615EF0] text-white' : 'bg-gray-500 text-white' }} 
+            rounded-xl">
+            {{ $chat->message }}
+            <span class="text-[8px] text-right mt-1 text-slate-300">{{$chat->created_at->format('h:i A')}}</span>
+            
+        </p>
+    </div>
+@endforeach
 
-            <div class="{{$chat->senderId == auth()->user()->id ? 'text-right justify-end' : 'text-left'}} flex flex-wrap" wire:transition>
-                <p class="px-2 py-3 text-[10px]  {{$chat->senderId == auth()->user()->id ? 'bg-[#615EF0] text-white' : 'bg-gray-300 text-black'}} rounded-xl"> {{$chat->message}}</p>
-            </div>
-          
-         @endforeach
     </div>
 
  <div class="flex fixed bottom-4 items-center xl:justify-center px-4 gap-5">
@@ -54,7 +69,7 @@
       </svg>
 
       <div class="flex items-center flex-grow justify-between border w-80 sm:w-[26rem] lg:w-[41rem] xl:w-[53rem] 2xl:w-[63rem] rounded-md h-10 border-gray-300 px-3 py-3">
-        <input id="text"  wire:model.live='text' type="text" class="w-full outline-0 border-0" placeholder="Type a message" />
+        <input id="text" wire:keydown.enter="sendText"  wire:model.live='text' type="text" class="w-full outline-0 border-0" placeholder="Type a message" />
         <button  class="relative">
             <svg 
                 wire:click='sendText' 
@@ -94,16 +109,11 @@
            
             
             channel.listen(".messagesent", (data) => {
-                   console.log("message details: ", data, data.message);
-                   Livewire.dispatch('messageReceived');   
-            
-                   setTimeout(() => {
+                   Livewire.dispatch('messageReceived')  
                     let chatBox = document.getElementById("messages");
                     if (chatBox) {
                         chatBox.scrollTop = chatBox.scrollHeight;
                     }
-                }, 100);
-                 
                 })
                 .subscription.bind("pusher:subscription_succeeded",  () => {
                     console.log(`✅ Successfully subscribed to chat.${roomId}!`);

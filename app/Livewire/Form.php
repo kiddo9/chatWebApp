@@ -95,12 +95,10 @@ class Form extends Component
             if(auth()->check()){
                 return redirect('/messages');
             }
-            sleep(3);
         }
 
         public function nextStep(){
             
-            sleep(2);
             $this->validate($this->rule[$this->multiform]);
 
             $checkUser = User::where('username', $this->username)->first();
@@ -156,8 +154,6 @@ class Form extends Component
              ]);
 
             Storage::delete('livewire-tmp/'.$this->updateImage);
-
-            sleep(2);
 
             return redirect('/messages')->with('success', 'Your account has been created');   
         }

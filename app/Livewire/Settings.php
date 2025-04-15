@@ -30,8 +30,6 @@ class Settings extends Component
         $this->bio = $auth->bio;
         $this->hobbys = json_decode($auth->hobbys);
         $this->friends = json_decode($auth->friends);
-
-        sleep(2);
     }
 
     public function placeholder(){
@@ -49,7 +47,6 @@ class Settings extends Component
         Auth::logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
-        sleep(3);
         return redirect('/login');
         
     }

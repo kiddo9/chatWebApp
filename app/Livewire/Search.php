@@ -35,7 +35,7 @@ class Search extends Component
     }
 
     public function mount(){
-        sleep(3);
+       
     }
     
     public function render()

@@ -23,7 +23,6 @@ class ChatSpace extends Component
 
     #[On('cred')]
     public function openChat($FriendId, $chatSpaceId){
-
         $friend = User::find($FriendId);
         if(!$friend){
             session()->flash('error', 'friend not found');
