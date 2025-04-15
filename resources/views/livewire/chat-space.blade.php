@@ -54,11 +54,22 @@
       </svg>
 
       <div class="flex items-center flex-grow justify-between border w-80 sm:w-[26rem] lg:w-[41rem] xl:w-[53rem] 2xl:w-[63rem] rounded-md h-10 border-gray-300 px-3 py-3">
-        <input id="text" wire:model='text' type="text" class="w-full outline-0 border-0" placeholder="Type a message" />
-        <button class="relative">
-            <svg wire:click='sendText' id="sendButton" wire:loading.remove xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-[#615EF0] cursor-pointer">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-            </svg>
+        <input id="text"  wire:model.live='text' type="text" class="w-full outline-0 border-0" placeholder="Type a message" />
+        <button  class="relative">
+            <svg 
+                wire:click='sendText' 
+                id="sendButton" 
+                wire:loading.remove 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke-width="1.5" 
+                stroke="currentColor"
+                class="size-6 cursor-pointer transition-colors duration-300 
+                    {{ strlen($text) > 0 ? 'text-[#615EF0] z-50' : 'hidden' }}"
+    >
+        <path wire:loading.remove stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+    </svg>
 
             <div wire:loading class='absolute inset-0 z-40'>
                 <div role="status" class="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2">
@@ -77,9 +88,6 @@
 </div> 
 @script
     <script>
-        let pusher_Error = document.getElementById("pusher-Error")
-        let pusherMessage = document.getElementById("error-text")
-
         window.addEventListener('chatRoomSelected', () => {
             let roomId = $wire.roomId;
             let channel = window.Echo.channel(`chat.${roomId}`);
@@ -99,21 +107,6 @@
                 })
                 .subscription.bind("pusher:subscription_succeeded",  () => {
                     console.log(`✅ Successfully subscribed to chat.${roomId}!`);
-                    if(pusher_Error && pusherMessage){
-                        setTimeout(() => {
-                            pusher_Error.classList.add("z-50")
-                            pusher_Error.classList.remove("-z-50")
-                            pusherMessage.innerHTML = "connected sussefully"
-                        }, 3000)
-                    }else{
-                        setTimeout(() => {
-                            pusher_Error.classList.add("z-50")
-                            pusher_Error.classList.remove("-z-50")
-                            pusherMessage.innerHTML = "connected srth dey sup sussefully"
-                        }, 3000)
-                    }
-                    
-                    
                 });
               
                 setTimeout(() => {
@@ -122,54 +115,7 @@
                         chatBox.scrollTop = chatBox.scrollHeight;
                     }
                 }, 100);
-
-
-                window.Echo.connector.pusher.connection.bind("error", function (err) {
-                console.error("Pusher error:", err);
-
-                if (err.error) {
-                    console.error("Pusher error:", err.error);
-
-                    if (
-                        err.error.message &&
-                        err.error.message.includes("Couldn't resolve host")
-                    ) {
-                        alert(
-                            "Real-time features are currently unavailable. Please refresh or try again later."
-                        );
-                    }
-                }
-
-                // Display custom messages for users
-                if (err.error.data && err.error.data.code === 4004) {
-                    console.log("Pusher limit exceeded or connection failed.");
-                } else if (err.type === "WebSocketError") {
-                    console.log("Network issue. Trying to reconnect...");
-                }
-            });
-
-            window.Echo.connector.pusher.connection.bind("disconnected", () => {
-                console.log("Disconnected from chat. Please check your internet.");
-            });
-
-            window.Echo.connector.pusher.connection.bind("connecting", () => {
-                console.log("Trying to connect to Pusher...");
-            });
-
-            window.Echo.connector.pusher.connection.bind("connected", () => {
-                console.log("Connected to Pusher!");
-            });
-        });
-
-        window.Echo.connector.pusher.connection.bind("unavailable", () => {
-            console.log("Pusher is currently unavailable. Please try again later.");
-            setTimeout(() => {
-                pusher_Error.classList.add("z-50")
-                pusher_Error.classList.remove("-z-50")
-                pusherMessage.innerHTML = "Pusher is currently unavailable."
-            }, 3000)
-        });
-
+        });;
         
     </script>
 @endscript
