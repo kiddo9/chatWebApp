@@ -9,7 +9,7 @@ use Livewire\Component;
 
 class Messages extends Component
 {
-    public $friends = [];
+    public $friends;
     public $chatSpaceid;
     public $messages = [];
     public $friendId;
@@ -39,20 +39,12 @@ class Messages extends Component
 
     public function mount(){
         $authUser = User::find(auth()->user()->id);
-        $allUsers = User::all();
 
-        if($authUser){
-            $friendList = json_decode($authUser->friends);
-
-            foreach($allUsers as $user){
-                
-                $friends = in_array($user->id, $friendList);  
-                if($friends){
-                    $list = User::findMany($user->id);
-                    $this->friends = $list;
-                }
-            }
+        $friendList = json_decode($authUser->friends);
+        if(is_array($friendList)){
+             $this->friends = User::whereIn('id', $friendList)->get();
         }
+       
         sleep(3);
     }
 

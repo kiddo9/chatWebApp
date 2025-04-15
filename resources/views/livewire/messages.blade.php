@@ -19,6 +19,7 @@
    <x-search />
 
    <div class="mt-10 flex flex-col md:grid md:grid-cols-2 lg:flex lg:flex-col gap-7">
+   
     @foreach ($friends as $friend)
     <div wire:click='openChatSpace({{$friend['id']}})' class="flex justify-between px-3 items-center cursor-pointer">
         <div class="flex items-center gap-2 px-3 ">
@@ -48,7 +49,7 @@
     {{-- The whole world belongs to you. --}}
 </div> 
 
-<livewire:chat-space  />
+    <livewire:chat-space  />
 
 
 </div>
